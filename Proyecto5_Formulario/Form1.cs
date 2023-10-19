@@ -9,13 +9,15 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using TextBox = System.Windows.Forms.TextBox;
+using MySql.Data.MySqlClient;
+
 
 namespace Proyecto5_Formulario
 {
     public partial class Form1 : Form
     {
+        string conexionSQl = "Server=localhost;Port=3306;Database=registros;Uid=root;Pwd=;";
         public Form1()
         {
             InitializeComponent();
@@ -25,6 +27,7 @@ namespace Proyecto5_Formulario
             tbTelefono.TextChanged += validarTelefono;
             tbNombre.TextChanged += validarNombre;
             tbApellidos.TextChanged += validarApellidos;
+
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -58,7 +61,7 @@ namespace Proyecto5_Formulario
                 genero = "Mujer";
             }
             if (EsEnteroValido(edad) && EsDecimalValido(estatura) && EsEnteroValidoDe10Digitos(telelfono) && EstextoValido(nombres)
-                && EstextoValido(apellidos)){
+                && EstextoValido(apellidos)) {
 
 
                 //Crear una cadena con los datos 
@@ -117,17 +120,7 @@ namespace Proyecto5_Formulario
         {
             return Regex.IsMatch(valor, @"^[a-zA-Z\s]+$");
         }
-
-        private void btnLimpiar_Click(object sender, EventArgs e)
-        {
-            textBox1.Clear();
-            textBox2.Clear();
-            textBox3.Clear();
-            textBox4.Clear();
-            textBox5.Clear();
-            rbHombre.Checked = false;
-            rbMujer.Checked = false;
-        }
+        
         private void validarEdad(object sender, EventArgs e)
         {
             TextBox textBox = (TextBox)sender;
@@ -152,7 +145,7 @@ namespace Proyecto5_Formulario
         {
             TextBox textBox = (TextBox)sender;
             string input = textBox.Text;
-            if (input.Length > 10)
+            if (input.Length >= 10)
             {
                 if (!EsEnteroValidoDe10Digitos(input))
                 {
@@ -184,6 +177,17 @@ namespace Proyecto5_Formulario
                 MessageBox.Show("Por favor ingrese apellidos válidos (solo letras y espacios).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBox.Clear();
             }
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear();
+            textBox2.Clear();
+            textBox3.Clear();
+            textBox4.Clear();
+            textBox5.Clear();
+            rbHombre.Checked = false;
+            rbMujer.Checked = false;
         }
     }
 }
