@@ -29,6 +29,28 @@ namespace Proyecto5_Formulario
             tbApellidos.TextChanged += validarApellidos;
 
         }
+        private void InsertarRegistro(string nombre, string apellidos, int edad, decimal estatura, string telefono, string genero)
+        {
+            using (MySqlConnection connection = new MySqlConnection(conexionSQl))
+            {
+                connection.Open();
+
+                string InsertQuery = "INSERT INTO Registros (Nombre, Apellidos, Edad, Estatura, Telefono, Genero) " +
+                    "VALUES (@Nombre, @Apellidos, @Edad, @Estatura, @Telefono, @Genero)";
+                using (MySqlCommand command = new MySqlCommand(InsertQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@Nombre", nombre);
+                    command.Parameters.AddWithValue("@Apellidos", apellidos);
+                    command.Parameters.AddWithValue("@Edad", edad);
+                    command.Parameters.AddWithValue("@Estatura", estatura);
+                    command.Parameters.AddWithValue("@Telefono", telefono);
+                    command.Parameters.AddWithValue("@Genero", genero);
+
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -45,9 +67,9 @@ namespace Proyecto5_Formulario
             //Obtener los datos de los TexBox
             string nombres = textBox1.Text;
             string apellidos = textBox2.Text;
-            string edad = textBox3.Text;
+            string edad = textBox5.Text;
             string estatura = textBox4.Text;
-            string telelfono = textBox5.Text;
+            string telelfono = textBox3.Text;
 
 
             //Obtener el genero seleccinado
@@ -65,7 +87,7 @@ namespace Proyecto5_Formulario
 
 
                 //Crear una cadena con los datos 
-                string datos = $"Nombres: {nombres}\r\nApellidos: {apellidos}\r\nTelefono: {telelfono} kg\r\nEstatura: {estatura}cm\r\nEdad: {edad} años\n\nGenero: {genero}";
+                string datos = $"Nombres: {nombres}\r\nApellidos: {apellidos}\r\nTelefono: {telelfono} \r\nEstatura: {estatura}cm\r\nEdad: {edad} años\r\nGenero: {genero}";
 
                 //Guardar los datos en un archivo de texto
                 string rutaArchivo = "C:/Users/MARIO/OneDrive/Documentos/prueba.txt";
@@ -84,9 +106,14 @@ namespace Proyecto5_Formulario
                         {
                             // Si el archivo existe, añadir un separador antes del nuevo regristro 
                             writer.WriteLine();
+                            InsertarRegistro(nombres, apellidos, int.Parse(edad), decimal.Parse(estatura), telelfono, genero);
+                            MessageBox.Show("Datos Ingresados Correctamente");
                         }
-                        writer.WriteLine(datos);
-
+                        else {
+                            writer.WriteLine(datos);
+                            InsertarRegistro(nombres, apellidos, int.Parse(edad), decimal.Parse(estatura), telelfono, genero);
+                            MessageBox.Show("Datos Ingresados Correctamente");
+                        }
 
                     }
 
@@ -113,8 +140,15 @@ namespace Proyecto5_Formulario
         }
         private bool EsEnteroValidoDe10Digitos(string valor)
         {
-            long resultado;
-            return long.TryParse(valor, out resultado) && valor.Length == 10;
+            if (valor.Length != 10)
+            {
+                return false;
+            }
+            if (!valor.All(char.IsDigit))
+            {
+                return false;
+            }
+            return true;
         }
         private bool EstextoValido(string valor)
         {
@@ -145,17 +179,14 @@ namespace Proyecto5_Formulario
         {
             TextBox textBox = (TextBox)sender;
             string input = textBox.Text;
-            if (input.Length >= 10)
+            if (input.Length > 10)
             {
-                if (!EsEnteroValidoDe10Digitos(input))
-                {
-                    MessageBox.Show("Por favor ingrese un número de teléfono válido de 10 dígitos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    textBox.Clear();
-                }
+                return;
             }
-            else if (!EsEnteroValidoDe10Digitos(input))
+            if (!EsEnteroValidoDe10Digitos(input))
             {
                 MessageBox.Show("Por favor ingrese un número de teléfono válido de 10 dígitos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textBox.Clear();
             }
         }
 
