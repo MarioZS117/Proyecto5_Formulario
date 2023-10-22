@@ -40,7 +40,7 @@ namespace Proyecto5_Formulario
                 using (MySqlCommand command = new MySqlCommand(InsertQuery, connection))
                 {
                     command.Parameters.AddWithValue("@Nombre", nombre);
-                    command.Parameters.AddWithValue("@Apellidos", apellidos);
+                    command.Parameters.AddWithValue("@Apel+lidos", apellidos);
                     command.Parameters.AddWithValue("@Edad", edad);
                     command.Parameters.AddWithValue("@Estatura", estatura);
                     command.Parameters.AddWithValue("@Telefono", telefono);
