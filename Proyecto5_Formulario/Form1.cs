@@ -35,12 +35,12 @@ namespace Proyecto5_Formulario
             {
                 connection.Open();
 
-                string InsertQuery = "INSERT INTO Registros (Nombre, Apellidos, Edad, Estatura, Telefono, Genero) " +
-                    "VALUES (@Nombre, @Apellidos, @Edad, @Estatura, @Telefono, @Genero)";
+                string InsertQuery = "INSERT INTO Registros (Nombre, Apellidos, Telefono, Estatura, Edad, Genero) " +
+                    "VALUES (@Nombre, @Apellidos, @Telefono, @Estatura, @Edad, @Genero)";
                 using (MySqlCommand command = new MySqlCommand(InsertQuery, connection))
                 {
                     command.Parameters.AddWithValue("@Nombre", nombre);
-                    command.Parameters.AddWithValue("@Apel+lidos", apellidos);
+                    command.Parameters.AddWithValue("@Apellidos", apellidos);
                     command.Parameters.AddWithValue("@Edad", edad);
                     command.Parameters.AddWithValue("@Estatura", estatura);
                     command.Parameters.AddWithValue("@Telefono", telefono);
